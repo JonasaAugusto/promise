@@ -1,0 +1,16 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+*.swp
+*.swo
+
+# Assets privados (não subir foto/música ao repo público)
+assets/foto.jpg
+assets/foto.jpeg
+assets/foto.png
+assets/musica.mp3
+assets/musica.mp4

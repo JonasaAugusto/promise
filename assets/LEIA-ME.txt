@@ -1,0 +1,12 @@
+COLOQUE NESTA PASTA:
+
+1. foto.jpg
+   - Uma foto de vocês dois (de preferência quadrada ou horizontal, até ~2MB)
+   - Usada no preview do link no WhatsApp e como ícone do site no iPhone
+
+2. musica.mp3  OU  musica.mp4
+   - A música de vocês. Toca automaticamente quando ela clicar em "Abrir a carta"
+   - Pode ser .mp3 ou .mp4 (com qualquer um dos dois nomes o site encontra)
+
+Depois de colocar os arquivos, me avise no Claude Code que eu finalizo as configurações
+(pergunta secreta e ajustes finais — tudo fica em js/config.js).
