@@ -11,6 +11,5 @@ desktop.ini
 *.swo
 
 # Assets privados (não subir foto/música ao repo público)
-assets/foto.jpg
 assets/foto.jpeg
 assets/foto.png
