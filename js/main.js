@@ -159,7 +159,14 @@ function normalizeAnswer(str) {
    Só "click" — no iOS o toque dispara click; ouvir touchstart junto
    causava ripple e scroll duplicados. O clique é o gesto que o iOS
    exige para liberar o áudio, então a música começa aqui. */
-const openBtn = document.getElementById('openBtn');
+const openBtn   = document.getElementById('openBtn');
+const OPENED_KEY = 'promise_opened';
+
+// Se ela já abriu a carta antes, não precisa clicar de novo ao recarregar
+if (localStorage.getItem(OPENED_KEY) === 'true') {
+    document.body.classList.remove('sealed');
+}
+
 if (openBtn) {
     openBtn.addEventListener('click', function (e) {
         // Ripple
@@ -176,7 +183,11 @@ if (openBtn) {
 
         startMusic();
 
-        // Scroll to letter
+        // Quebra o "selo": a carta passa a existir na página
+        document.body.classList.remove('sealed');
+        try { localStorage.setItem(OPENED_KEY, 'true'); } catch (err) {}
+
+        // Scroll to letter (scrollIntoView já força o layout atualizado)
         const letter = document.getElementById('letter');
         if (letter) letter.scrollIntoView({ behavior: 'smooth' });
     });

@@ -920,6 +920,12 @@ body {
    ================================================================ */
 .hidden { display: none !important; }
 
+/* ---- Carta selada ----
+   Enquanto o botão "Abrir a carta" não for clicado, a carta nem
+   existe na página — rolar não revela nada. */
+body.sealed #letter { display: none; }
+body.sealed .hero-scroll-hint { display: none; }
+
 
 /* ================================================================
    TRAVA SECRETA
