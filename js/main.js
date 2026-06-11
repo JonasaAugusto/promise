@@ -118,7 +118,10 @@ function normalizeAnswer(str) {
 
 (function initLock() {
     const secret = window.CONFIG?.PERGUNTA_SECRETA;
-    const enabled = secret && secret.resposta &&
+    // Aceita lista de variações (respostas) ou string única (resposta)
+    const variants = [].concat(secret?.respostas ?? secret?.resposta ?? [])
+                       .filter(Boolean).map(normalizeAnswer);
+    const enabled = variants.length > 0 &&
                     localStorage.getItem(LOCK_KEY) !== 'true';
     if (!enabled || !lockScreen) return;
 
@@ -130,11 +133,12 @@ function normalizeAnswer(str) {
     const errorEl  = document.getElementById('lock-error');
 
     function tryUnlock() {
-        if (normalizeAnswer(input.value) === normalizeAnswer(secret.resposta)) {
+        const typed = normalizeAnswer(input.value);
+        const ok = variants.some(v => typed === v || typed.includes(v));
+        if (ok) {
             localStorage.setItem(LOCK_KEY, 'true');
             lockScreen.classList.add('unlocking');
             document.body.classList.remove('locked');
-            startMusic(); // aproveita o gesto para o iOS liberar o áudio
             setTimeout(() => lockScreen.classList.add('hidden'), 900);
         } else {
             errorEl.textContent = secret.erroMensagem;
@@ -151,11 +155,32 @@ function normalizeAnswer(str) {
 })();
 
 
-/* ---- Música no primeiro gesto ----
-   O iOS exige um gesto da usuária para liberar áudio; sem o botão de
-   abrir a carta, usamos o primeiro toque em qualquer lugar da página
-   (o destravar da pergunta secreta também chama startMusic). */
-document.addEventListener('pointerdown', () => startMusic(), { once: true });
+/* ---- Botão "Abrir a carta": ripple + música + smooth scroll ----
+   Só "click" — no iOS o toque dispara click; ouvir touchstart junto
+   causava ripple e scroll duplicados. O clique é o gesto que o iOS
+   exige para liberar o áudio, então a música começa aqui. */
+const openBtn = document.getElementById('openBtn');
+if (openBtn) {
+    openBtn.addEventListener('click', function (e) {
+        // Ripple
+        const rect   = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        const size   = Math.max(rect.width, rect.height);
+        ripple.className = 'ripple';
+        ripple.style.width  = size + 'px';
+        ripple.style.height = size + 'px';
+        ripple.style.left   = (e.clientX - rect.left - size / 2) + 'px';
+        ripple.style.top    = (e.clientY - rect.top  - size / 2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 700);
+
+        startMusic();
+
+        // Scroll to letter
+        const letter = document.getElementById('letter');
+        if (letter) letter.scrollIntoView({ behavior: 'smooth' });
+    });
+}
 
 
 /* ---- Botões de WhatsApp ---- */

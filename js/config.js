@@ -12,11 +12,14 @@ window.CONFIG = {
     WHATSAPP_MENSAGEM: 'Acabei de ler a sua carta... ❤',
 
     /* ---- Pergunta secreta (trava de entrada) ----
-       Só ela sabe a resposta. A comparação ignora maiúsculas e acentos.
-       Deixe a resposta vazia ('') para DESATIVAR a trava. */
+       Só ela sabe a resposta. A comparação ignora maiúsculas e acentos,
+       e aceita se a resposta digitada CONTIVER qualquer uma das
+       variações abaixo (ex: "no shopping", "fomos no shoping"...).
+       Deixe a lista vazia ([]) para DESATIVAR a trava. */
     PERGUNTA_SECRETA: {
         pergunta: 'Onde foi o nosso primeiro encontro?',
-        resposta: 'Shopping',
+        respostas: ['shopping', 'shoping', 'shoppin', 'shopin',
+                    'chopping', 'choping', 'xopping', 'xoping'],
         erroMensagem: 'Hmm... tem certeza que é você, Princesa? 😏 Tenta de novo.'
     }
 };

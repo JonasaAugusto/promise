@@ -187,11 +187,73 @@ body {
     letter-spacing: 0.04em;
 }
 
+/* Open Button */
+.open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 2.8rem;
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    border-radius: 50px;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeSlideDown 1s ease 1.3s forwards;
+    transition: color 0.35s ease, box-shadow 0.35s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.open-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--gold), var(--red-dark));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    border-radius: inherit;
+}
+
+.open-btn:hover::before,
+.open-btn:active::before { opacity: 1; }
+
+.open-btn:hover {
+    color: #0d0005;
+    box-shadow: 0 0 35px rgba(201, 168, 76, 0.55);
+}
+
+.btn-text, .btn-heart { position: relative; z-index: 1; }
+
+.btn-heart {
+    font-size: 1.35rem;
+    display: inline-block;
+    animation: heartBeat 1.6s ease-in-out infinite;
+}
+
 @keyframes heartBeat {
     0%, 100% { transform: scale(1); }
     20%       { transform: scale(1.35); }
     40%       { transform: scale(1); }
     60%       { transform: scale(1.2); }
+}
+
+/* Ripple */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(0);
+    animation: rippleAnim 0.65s linear;
+    pointer-events: none;
+}
+@keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
 }
 
 /* Scroll hint */
@@ -834,6 +896,7 @@ body {
 }
 
 @media (max-width: 480px) {
+    .open-btn { padding: 0.85rem 1.8rem; font-size: 0.98rem; }
     .letter-card { padding: 1.5rem 1.2rem; }
     .letter-section { margin-bottom: 3.5rem; }
     #game-area { height: 340px; }
@@ -845,6 +908,7 @@ body {
 @media (hover: none) {
     body { cursor: auto; }
     #cursor { display: none; }
+    .open-btn { cursor: pointer; }
     .game-heart-el { cursor: pointer; }
     .victory-back-btn { cursor: pointer; }
     .lock-btn, .music-btn, .whatsapp-btn { cursor: pointer; }
@@ -866,12 +930,14 @@ body {
     z-index: 100000;
     background: radial-gradient(ellipse at center, #330010 0%, #1a0008 45%, #0d0005 100%);
     display: flex;
-    align-items: center;
     justify-content: center;
     text-align: center;
     padding: 1.5rem;
     padding-top: calc(1.5rem + env(safe-area-inset-top));
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    /* Rolável: quando o teclado do iPhone sobe, dá para alcançar o botão */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     opacity: 1;
     transition: opacity 0.85s ease;
 }
@@ -880,7 +946,13 @@ body {
 
 body.locked { overflow: hidden; }
 
-.lock-content { max-width: 420px; width: 100%; }
+.lock-content {
+    max-width: 420px;
+    width: 100%;
+    /* Conteúdo no terço de cima da tela, não no centro: assim o botão
+       "Abrir" fica ACIMA do teclado do iPhone quando ele abrir */
+    margin: clamp(3rem, 12vh, 8rem) auto 3rem;
+}
 
 .lock-heart {
     font-size: 3.2rem;
